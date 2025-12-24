@@ -26,9 +26,9 @@ blog-backend/
 │   ├── config/
 │   │   └── database.js
 │   ├── models/
-│   │   ├── User.js
-│   │   ├── Blog.js
-│   │   └── Comment.js
+│   │   ├── user.js
+│   │   ├── blog.js
+│   │   └── comment.js
 │   ├── routes/
 │   │   ├── auth.routes.js
 │   │   ├── blog.routes.js
