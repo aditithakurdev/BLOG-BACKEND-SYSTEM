@@ -14,13 +14,13 @@
 
 *DESCRIPTION*: This project focuses on building a Blog Backend System using Node.js (Express.js). The application provides RESTful APIs for user registration and login, blog post management, and commenting features. Authentication ensures that only authorized users can create, edit, or delete blog content. The backend is integrated with a relational database such as MySQL or PostgreSQL, making it a complete and functional server-side application.
 
-*Tech Stack* 
+*TECH STACK* 
     - Node.js
     - Express.js
     - Database: PostgreSQL
     - Authentication: JWT
 
-*Project Structure*
+*PROJECT STRUCTURE*
 blog-backend/
 │── src/
 │   ├── config/
@@ -40,6 +40,6 @@ blog-backend/
 │   ├── middleware/
 │   │   └── auth.middleware.js
 │   ├── app.js
-│── server.js
+│── index.js
 │── package.json
 │── .env
