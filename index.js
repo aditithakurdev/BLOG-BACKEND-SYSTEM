@@ -9,6 +9,10 @@ require('./src/models/comments');
 
 const PORT = process.env.PORT;
 
+sequelize.authenticate()
+  .then(() => console.log('PostgreSQL connected'))
+  .catch(err => console.error('Connection failed:', err));
+ 
 sequelize.sync({ alter: true })
   .then(() => {
     console.log('Database synced');
