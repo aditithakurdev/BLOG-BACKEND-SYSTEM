@@ -1,6 +1,7 @@
-const Comment = require('../models/comments');
+const Comment = require('../models/comments'); 
 const User = require('../models/user');
 const Blog = require('../models/blog');
+const messages = require('../libs/statusMessages');
 
 // ADD COMMENT
 exports.addComment = async (req, res) => {
@@ -9,12 +10,12 @@ exports.addComment = async (req, res) => {
     const blogId = req.params.id;
 
     if (!content) {
-      return res.status(400).json({ message: 'Comment content is required' });
+      return res.status(400).json({ message: messages.MISSING_FIELDS });
     }
 
     const blog = await Blog.findByPk(blogId);
     if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
+      return res.status(404).json({ message: messages.BLOG_NOT_FOUND });
     }
 
     const comment = await Comment.create({
@@ -23,12 +24,12 @@ exports.addComment = async (req, res) => {
       userId: req.user.id
     });
 
-    res.status(201).json({
-      message: 'Comment added successfully',
+    return res.status(201).json({
+      message: messages.COMMENT_ADDED,
       comment
     });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to add comment', error });
+    return res.status(500).json({ message: messages.COMMENT_ADD_FAILED, error });
   }
 };
 
@@ -45,8 +46,8 @@ exports.getCommentsByBlog = async (req, res) => {
       }
     });
 
-    res.json(comments);
+    return res.json(comments);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch comments', error });
+    return res.status(500).json({ message: messages.COMMENTS_FETCH_FAILED, error });
   }
 };

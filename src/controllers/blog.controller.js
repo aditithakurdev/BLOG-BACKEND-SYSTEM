@@ -1,5 +1,6 @@
-const Blog = require('../models/blog');
+const Blog = require('../models/blog'); 
 const User = require('../models/user');
+const messages = require('../libs/statusMessages');
 
 // CREATE BLOG
 exports.createBlog = async (req, res) => {
@@ -7,7 +8,7 @@ exports.createBlog = async (req, res) => {
     const { title, content } = req.body;
 
     if (!title || !content) {
-      return res.status(400).json({ message: 'Title and content are required' });
+      return res.status(400).json({ message: messages.MISSING_FIELDS });
     }
 
     const blog = await Blog.create({
@@ -16,12 +17,12 @@ exports.createBlog = async (req, res) => {
       userId: req.user.id
     });
 
-    res.status(201).json({
-      message: 'Blog created successfully',
+    return res.status(201).json({
+      message: messages.BLOG_CREATED,
       blog
     });
   } catch (error) {
-    res.status(500).json({ message: 'Blog creation failed', error });
+    return res.status(500).json({ message: messages.BLOG_CREATION_FAILED, error });
   }
 };
 
@@ -35,9 +36,9 @@ exports.getAllBlogs = async (req, res) => {
       }
     });
 
-    res.json(blogs);
+    return res.json(blogs);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch blogs', error });
+    return res.status(500).json({ message: messages.BLOG_FETCH_FAILED, error });
   }
 };
 
@@ -52,12 +53,12 @@ exports.getBlogById = async (req, res) => {
     });
 
     if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
+      return res.status(404).json({ message: messages.BLOG_NOT_FOUND });
     }
 
-    res.json(blog);
+    return res.json(blog);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch blog', error });
+    return res.status(500).json({ message: messages.BLOG_FETCH_FAILED, error });
   }
 };
 
@@ -67,22 +68,21 @@ exports.updateBlog = async (req, res) => {
     const blog = await Blog.findByPk(req.params.id);
 
     if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
+      return res.status(404).json({ message: messages.BLOG_NOT_FOUND });
     }
 
     if (blog.userId !== req.user.id) {
-      return res.status(403).json({ message: 'Unauthorized' });
+      return res.status(403).json({ message: messages.UNAUTHORIZED });
     }
 
     const { title, content } = req.body;
-
     blog.title = title || blog.title;
     blog.content = content || blog.content;
     await blog.save();
 
-    res.json({ message: 'Blog updated successfully', blog });
+    return res.json({ message: messages.BLOG_UPDATED, blog });
   } catch (error) {
-    res.status(500).json({ message: 'Update failed', error });
+    return res.status(500).json({ message: messages.BLOG_UPDATE_FAILED, error });
   }
 };
 
@@ -92,16 +92,16 @@ exports.deleteBlog = async (req, res) => {
     const blog = await Blog.findByPk(req.params.id);
 
     if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
+      return res.status(404).json({ message: messages.BLOG_NOT_FOUND });
     }
 
     if (blog.userId !== req.user.id) {
-      return res.status(403).json({ message: 'Unauthorized' });
+      return res.status(403).json({ message: messages.UNAUTHORIZED });
     }
 
     await blog.destroy();
-    res.json({ message: 'Blog deleted successfully' });
+    return res.json({ message: messages.BLOG_DELETED });
   } catch (error) {
-    res.status(500).json({ message: 'Delete failed', error });
+    return res.status(500).json({ message: messages.BLOG_DELETE_FAILED, error });
   }
 };
