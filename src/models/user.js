@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const ROLES = require('../libs/roles');
 
 const User = sequelize.define('User', {
   id: {
@@ -19,6 +20,10 @@ const User = sequelize.define('User', {
   password: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+   role: { 
+    type: DataTypes.STRING, 
+    defaultValue: ROLES.USER 
   }
 }, {
   timestamps: true

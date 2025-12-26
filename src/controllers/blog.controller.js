@@ -1,6 +1,7 @@
 const Blog = require('../models/blog'); 
 const User = require('../models/user');
 const messages = require('../libs/statusMessages');
+const ROLES = require('../libs/roles');
 
 // CREATE BLOG
 exports.createBlog = async (req, res) => {
@@ -90,18 +91,17 @@ exports.updateBlog = async (req, res) => {
 exports.deleteBlog = async (req, res) => {
   try {
     const blog = await Blog.findByPk(req.params.id);
+    if (!blog) return res.status(404).json({ message: messages.BLOG_NOT_FOUND });
 
-    if (!blog) {
-      return res.status(404).json({ message: messages.BLOG_NOT_FOUND });
-    }
-
-    if (blog.userId !== req.user.id) {
+    // Only author or admin can delete
+    if (req.user.role !== ROLES.ADMIN && blog.userId !== req.user.id) {
       return res.status(403).json({ message: messages.UNAUTHORIZED });
     }
 
     await blog.destroy();
-    return res.json({ message: messages.BLOG_DELETED });
+    res.json({ message: messages.BLOG_DELETED });
   } catch (error) {
-    return res.status(500).json({ message: messages.BLOG_DELETE_FAILED, error });
+    res.status(500).json({ message: messages.BLOG_DELETE_FAILED, error });
   }
 };
+
