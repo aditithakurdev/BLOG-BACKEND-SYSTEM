@@ -5,7 +5,7 @@ const sequelize = require('./src/config/database');
 // Import models
 require('./src/models/user');
 require('./src/models/blog');
-require('./src/models/comment');
+require('./src/models/comments');
 
 const PORT = process.env.PORT;
 
